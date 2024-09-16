@@ -1,10 +1,5 @@
-target
-**/*.iml
-.idea
-**/__pycache__
-**/*.pyc
-.cache
-out/
-build/
-.gradle/
-.DS_Store
+.vs
+bin
+obj
+packages
+*.sln.DotSettings.user
