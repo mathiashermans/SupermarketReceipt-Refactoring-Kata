@@ -1,3 +1,4 @@
+using SupermarketReceipt.Offers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -59,64 +60,29 @@ public class ShoppingCart
         var offer = offers[product];
         var unitPrice = catalog.GetUnitPrice(product);
         Discount discount = null;
+        IDiscountStrategy discountStrategy = null;
 
         switch (offer.OfferType)
         {
             case SpecialOfferType.ThreeForTwo:
-                return CalculateThreeForTwoDiscount(product, unitPrice, quantityAsInt);
+                discountStrategy = new ThreeForTwoDiscount(product, quantityAsInt, unitPrice);
+                break;
             case SpecialOfferType.TenPercentDiscount:
-                return CalculateTenPercentDiscount(product, unitPrice, quantity, offer);
+                discountStrategy = new TenPercentDiscount(product, quantityAsInt, unitPrice);
+                break;
             case SpecialOfferType.TwoForAmount:
-                return CalculateTwoForAmountDiscount(product, unitPrice, quantityAsInt, offer);
+                discountStrategy = new TwoForAmountDiscount(product, quantityAsInt, unitPrice, offer);
+                break;
             case SpecialOfferType.FiveForAmount:
-                return CalculateFiveForAmountDiscount(product, unitPrice, quantityAsInt, offer);
+                discountStrategy = new FiveForAmountDiscount(product, quantityAsInt, unitPrice, offer);
+                break;
             default:
                 break;
-        }       
-
-        return discount;
-    }
-
-    private Discount CalculateFiveForAmountDiscount(Product product, double unitPrice, int quantityAsInt, Offer offer)
-    {
-        if (quantityAsInt < 5)
-            return null;
-
-        var numberOfXs = quantityAsInt / 5;
-        var discountTotal = unitPrice * quantityAsInt - (offer.Argument * numberOfXs + quantityAsInt % 5 * unitPrice);
-        return new Discount(product, 5 + " for " + PrintPrice(offer.Argument), -discountTotal);
-        
-    }
-
-    private Discount CalculateTwoForAmountDiscount(Product product, double unitPrice, int quantity, Offer offer)
-    {
-        if (quantity < 2)
-            return null;
+        }
 
         
-        var total = offer.Argument * (quantity / 2) + quantity % 2 * unitPrice;
-        var discountN = unitPrice * quantity - total;
-        return new Discount(product, "2 for " + PrintPrice(offer.Argument), -discountN);
-        
+
+        return discountStrategy.CalculateDiscount();
     }
 
-    private Discount CalculateTenPercentDiscount(Product product, double unitPrice, double quantity, Offer offer)
-    {
-        return new Discount(product, offer.Argument + "% off", -quantity * unitPrice * offer.Argument / 100.0);
-    }
-
-    private Discount CalculateThreeForTwoDiscount(Product product, double unitPrice, int quantity)
-    {
-        if (quantity < 3)
-            return null;
-
-        var numberOfXs = quantity / 3;
-        var discountAmount = unitPrice * quantity - (numberOfXs * 2 * unitPrice + (quantity % 3) * unitPrice);
-        return new Discount(product, "3 for 2", -discountAmount);
-    }
-
-    private string PrintPrice(double price)
-    {
-        return price.ToString("N2", Culture);
-    }
 }
