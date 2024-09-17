@@ -30,7 +30,7 @@ public class Teller
             receipt.AddProduct(p, quantity, unitPrice, price);
         }
 
-        theCart.HandleOffers(receipt, _offers, _catalog);
+        theCart.HandleOffers(receipt, _offers);
 
         return receipt;
     }

@@ -19,7 +19,7 @@ public class SupermarketTests
         var teller = new Teller(catalog);
         teller.AddSpecialOffer(SpecialOfferType.TenPercentDiscount, toothbrush, 10);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         var receipt = teller.ChecksOutArticlesFrom(shoppingCart);
@@ -46,7 +46,7 @@ public class SupermarketTests
         var teller = new Teller(catalog);
         teller.AddSpecialOffer(SpecialOfferType.TenPercentDiscount, toothbrush, 10);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(apple);
@@ -70,7 +70,7 @@ public class SupermarketTests
         var teller = new Teller(catalog);
         teller.AddSpecialOffer(SpecialOfferType.TenPercentDiscount, toothbrush, 10);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -95,7 +95,7 @@ public class SupermarketTests
         var teller = new Teller(catalog);
         teller.AddSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, 0);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -121,7 +121,7 @@ public class SupermarketTests
         var teller = new Teller(catalog);
         teller.AddSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, 0);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -149,7 +149,7 @@ public class SupermarketTests
         var teller = new Teller(catalog);
         teller.AddSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, 0);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -177,7 +177,7 @@ public class SupermarketTests
         var discountPrice = 3;
         teller.AddSpecialOffer(SpecialOfferType.TwoForAmount, toothbrush, discountPrice);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -202,7 +202,7 @@ public class SupermarketTests
         var discountPrice = 3;
         teller.AddSpecialOffer(SpecialOfferType.TwoForAmount, toothbrush, discountPrice);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -229,7 +229,7 @@ public class SupermarketTests
         var discountPrice = 3;
         teller.AddSpecialOffer(SpecialOfferType.TwoForAmount, toothbrush, discountPrice);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -255,7 +255,7 @@ public class SupermarketTests
         var discountPrice = 8;
         teller.AddSpecialOffer(SpecialOfferType.FiveForAmount, toothbrush, discountPrice);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -282,7 +282,7 @@ public class SupermarketTests
         var discountPrice = 8;
         teller.AddSpecialOffer(SpecialOfferType.FiveForAmount, toothbrush, discountPrice);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);
@@ -311,7 +311,7 @@ public class SupermarketTests
         var discountPrice = 8;
         teller.AddSpecialOffer(SpecialOfferType.FiveForAmount, toothbrush, discountPrice);
 
-        var shoppingCart = new ShoppingCart();
+        var shoppingCart = new ShoppingCart(catalog);
 
         // Act
         shoppingCart.AddItem(toothbrush);

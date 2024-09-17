@@ -7,11 +7,14 @@ namespace SupermarketReceipt;
 
 public class ShoppingCart
 {
-    //private readonly List<ProductQuantity> _items = new List<ProductQuantity>();
-    //private readonly Dictionary<Product, double> _productQuantities = new Dictionary<Product, double>();
     private readonly Dictionary<Product, ShoppingCartItem> _shoppingCartItems = new Dictionary<Product, ShoppingCartItem>();
     private static readonly CultureInfo Culture = CultureInfo.CreateSpecificCulture("en-GB");
+    private readonly SupermarketCatalog _catalog;
 
+    public ShoppingCart(SupermarketCatalog catalog)
+    {
+        _catalog = catalog;        
+    }
 
     public List<ShoppingCartItem> GetItems()
     {
@@ -32,14 +35,12 @@ public class ShoppingCart
         }
         else
         {
-            var shoppingCartItem = new ShoppingCartItem(product);
+            var shoppingCartItem = new ShoppingCartItem(product, _catalog.GetUnitPrice(product), quantity);
             _shoppingCartItems.Add(product, shoppingCartItem);
-        }
-
-        
+        }        
     }
 
-    public void HandleOffers(Receipt receipt, Dictionary<Product, Offer> offers, SupermarketCatalog catalog)
+    public void HandleOffers(Receipt receipt, Dictionary<Product, Offer> offers)
     {
         foreach (var p in _shoppingCartItems.Keys)
         {
@@ -47,39 +48,16 @@ public class ShoppingCart
             if (!offers.ContainsKey(p))
                 continue;
 
-            Discount discount = CalculateDiscount(offers, catalog, p);
+            Discount discount = CalculateDiscount(offers, p);
 
             if (discount != null)
                 receipt.AddDiscount(discount);
         }
     }
 
-    private Discount CalculateDiscount(Dictionary<Product, Offer> offers, SupermarketCatalog catalog, Product product)
+    private Discount CalculateDiscount(Dictionary<Product, Offer> offers, Product product)
     {
-
-        var quantity = _shoppingCartItems[product].Quantity;
-        var quantityAsInt = (int)_shoppingCartItems[product].Quantity;
-        var offer = offers[product];
-        _shoppingCartItems[product].SetUnitPrice(catalog.GetUnitPrice(product));
-        IDiscountStrategy discountStrategy = null;
-
-        switch (offer.OfferType)
-        {
-            case SpecialOfferType.ThreeForTwo:
-                discountStrategy = new ThreeForTwoDiscount(offer, _shoppingCartItems[product]);
-                break;
-            case SpecialOfferType.TenPercentDiscount:
-                discountStrategy = new PercentageDiscount(offer, _shoppingCartItems[product]);
-                break;
-            case SpecialOfferType.TwoForAmount:
-                discountStrategy = new TwoForAmountDiscount(offer, _shoppingCartItems[product]);
-                break;
-            case SpecialOfferType.FiveForAmount:
-                discountStrategy = new FiveForAmountDiscount(offer, _shoppingCartItems[product]);
-                break;
-            default:
-                break;
-        }              
+        var discountStrategy = DiscountStrategyFactory.GetDiscountStrategy(offers[product], _shoppingCartItems[product]);
 
         return discountStrategy.CalculateDiscount();
     }

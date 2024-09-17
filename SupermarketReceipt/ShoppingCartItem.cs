@@ -6,19 +6,15 @@ public class ShoppingCartItem
     public double UnitPrice { get; private set; }
     public int QuantityAsInt => (int)Quantity;
 
-    public ShoppingCartItem(Product product)
+    public ShoppingCartItem(Product product, double unitPrice, double initialQuantity = 1.0)
     {
         Product = product;
-        Quantity = 1;
+        UnitPrice = unitPrice;
+        Quantity = initialQuantity;
     }
 
     public void AddItemQuantity(double quantity) 
     {
         Quantity += quantity;
-    }
-
-    public void SetUnitPrice(double unitPrice)
-    {
-        UnitPrice = unitPrice;
     }
 }
