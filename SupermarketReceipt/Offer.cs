@@ -10,7 +10,7 @@ public enum SpecialOfferType
 
 public class Offer
 {
-    private Product _product;
+    public readonly Product _product;
 
     public Offer(SpecialOfferType offerType, Product product, double argument)
     {

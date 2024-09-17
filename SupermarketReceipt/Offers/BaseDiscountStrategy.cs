@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 namespace SupermarketReceipt.Offers;
 public abstract class BaseDiscountStrategy : IDiscountStrategy
 {
-    protected readonly Product _product;
+    protected readonly Offer _offer;
     protected readonly int _quantity;
     protected readonly double _unitPrice;
 
-    public BaseDiscountStrategy(Product product, int quantity, double unitPrice)
+    public BaseDiscountStrategy(Offer offer, int quantity, double unitPrice)
     {
-        _product = product;
+        _offer = offer;
         _quantity = quantity;
         _unitPrice = unitPrice;
     }

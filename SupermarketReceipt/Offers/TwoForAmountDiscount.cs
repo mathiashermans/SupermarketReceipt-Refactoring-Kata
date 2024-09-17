@@ -1,11 +1,9 @@
 ﻿namespace SupermarketReceipt.Offers;
 public class TwoForAmountDiscount : BaseDiscountStrategy
 {
-    private readonly Offer _offer;
 
-    public TwoForAmountDiscount(Product product, int quantity, double unitPrice, Offer offer) : base(product, quantity, unitPrice)
+    public TwoForAmountDiscount(Offer offer, int quantity, double unitPrice) : base(offer, quantity, unitPrice)
     {
-        _offer = offer;
     }
 
     public override Discount CalculateDiscount()
@@ -16,6 +14,6 @@ public class TwoForAmountDiscount : BaseDiscountStrategy
 
         var total = _offer.Argument * (_quantity / 2) + _quantity % 2 * _unitPrice;
         var discountN = _unitPrice * _quantity - total;
-        return new Discount(_product, "2 for " + PriceFormatter.FormatPrice(_offer.Argument), -discountN);
+        return new Discount(_offer._product, "2 for " + PriceFormatter.FormatPrice(_offer.Argument), -discountN);
     }
 }

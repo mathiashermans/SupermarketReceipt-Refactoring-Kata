@@ -65,22 +65,20 @@ public class ShoppingCart
         switch (offer.OfferType)
         {
             case SpecialOfferType.ThreeForTwo:
-                discountStrategy = new ThreeForTwoDiscount(product, quantityAsInt, unitPrice);
+                discountStrategy = new ThreeForTwoDiscount(offer, quantityAsInt, unitPrice);
                 break;
             case SpecialOfferType.TenPercentDiscount:
-                discountStrategy = new TenPercentDiscount(product, quantityAsInt, unitPrice);
+                discountStrategy = new PercentageDiscount(offer, quantityAsInt, unitPrice);
                 break;
             case SpecialOfferType.TwoForAmount:
-                discountStrategy = new TwoForAmountDiscount(product, quantityAsInt, unitPrice, offer);
+                discountStrategy = new TwoForAmountDiscount(offer, quantityAsInt, unitPrice);
                 break;
             case SpecialOfferType.FiveForAmount:
-                discountStrategy = new FiveForAmountDiscount(product, quantityAsInt, unitPrice, offer);
+                discountStrategy = new FiveForAmountDiscount(offer, quantityAsInt, unitPrice);
                 break;
             default:
                 break;
-        }
-
-        
+        }              
 
         return discountStrategy.CalculateDiscount();
     }
