@@ -5,17 +5,17 @@ public class FiveForAmountDiscount : BaseDiscountStrategy
 {
     private readonly string _description = "5 for ";
 
-    public FiveForAmountDiscount(Offer offer, int quantity, double unitPrice) : base(offer, quantity, unitPrice)
+    public FiveForAmountDiscount(Offer offer, ShoppingCartItem shoppingCartItem) : base(offer, shoppingCartItem)
     {
     }
 
     public override Discount CalculateDiscount()
     {
-        if (_quantity < 5)
+        if (_shoppingCartItem.QuantityAsInt < 5)
             return null;
 
-        var numberOfXs = _quantity / 5;
-        var discountTotal = _unitPrice * _quantity - (_offer.Argument * numberOfXs + _quantity % 5 * _unitPrice);
+        var numberOfXs = _shoppingCartItem.QuantityAsInt / 5;
+        var discountTotal = _shoppingCartItem.UnitPrice * _shoppingCartItem.QuantityAsInt - (_offer.Argument * numberOfXs + _shoppingCartItem.QuantityAsInt % 5 * _shoppingCartItem.UnitPrice);
         return new Discount(_offer._product, _description + PriceFormatter.FormatPrice(_offer.Argument), -discountTotal);
     }
 }

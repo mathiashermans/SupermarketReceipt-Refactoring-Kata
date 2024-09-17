@@ -2,18 +2,18 @@
 public class TwoForAmountDiscount : BaseDiscountStrategy
 {
 
-    public TwoForAmountDiscount(Offer offer, int quantity, double unitPrice) : base(offer, quantity, unitPrice)
+    public TwoForAmountDiscount(Offer offer, ShoppingCartItem shoppingCartItem) : base(offer, shoppingCartItem)
     {
     }
 
     public override Discount CalculateDiscount()
     {
-        if (_quantity < 2)
+        if (_shoppingCartItem.QuantityAsInt < 2)
             return null;
 
 
-        var total = _offer.Argument * (_quantity / 2) + _quantity % 2 * _unitPrice;
-        var discountN = _unitPrice * _quantity - total;
+        var total = _offer.Argument * (_shoppingCartItem.QuantityAsInt / 2) + _shoppingCartItem.QuantityAsInt % 2 * _shoppingCartItem.UnitPrice;
+        var discountN = _shoppingCartItem.UnitPrice * _shoppingCartItem.QuantityAsInt - total;
         return new Discount(_offer._product, "2 for " + PriceFormatter.FormatPrice(_offer.Argument), -discountN);
     }
 }

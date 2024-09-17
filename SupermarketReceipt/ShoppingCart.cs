@@ -7,14 +7,15 @@ namespace SupermarketReceipt;
 
 public class ShoppingCart
 {
-    private readonly List<ProductQuantity> _items = new List<ProductQuantity>();
-    private readonly Dictionary<Product, double> _productQuantities = new Dictionary<Product, double>();
+    //private readonly List<ProductQuantity> _items = new List<ProductQuantity>();
+    //private readonly Dictionary<Product, double> _productQuantities = new Dictionary<Product, double>();
+    private readonly Dictionary<Product, ShoppingCartItem> _shoppingCartItems = new Dictionary<Product, ShoppingCartItem>();
     private static readonly CultureInfo Culture = CultureInfo.CreateSpecificCulture("en-GB");
 
 
-    public List<ProductQuantity> GetItems()
+    public List<ShoppingCartItem> GetItems()
     {
-        return new List<ProductQuantity>(_items);
+        return new List<ShoppingCartItem>(_shoppingCartItems.Values);
     }
 
     public void AddItem(Product product)
@@ -25,21 +26,22 @@ public class ShoppingCart
 
     public void AddItemQuantity(Product product, double quantity)
     {
-        _items.Add(new ProductQuantity(product, quantity));
-        if (_productQuantities.ContainsKey(product))
+        if (_shoppingCartItems.ContainsKey(product))
         {
-            var newAmount = _productQuantities[product] + quantity;
-            _productQuantities[product] = newAmount;
+            _shoppingCartItems[product].AddItemQuantity(quantity);
         }
         else
         {
-            _productQuantities.Add(product, quantity);
+            var shoppingCartItem = new ShoppingCartItem(product);
+            _shoppingCartItems.Add(product, shoppingCartItem);
         }
+
+        
     }
 
     public void HandleOffers(Receipt receipt, Dictionary<Product, Offer> offers, SupermarketCatalog catalog)
     {
-        foreach (var p in _productQuantities.Keys)
+        foreach (var p in _shoppingCartItems.Keys)
         {
             
             if (!offers.ContainsKey(p))
@@ -55,26 +57,25 @@ public class ShoppingCart
     private Discount CalculateDiscount(Dictionary<Product, Offer> offers, SupermarketCatalog catalog, Product product)
     {
 
-        var quantity = _productQuantities[product];
-        var quantityAsInt = (int)quantity;
+        var quantity = _shoppingCartItems[product].Quantity;
+        var quantityAsInt = (int)_shoppingCartItems[product].Quantity;
         var offer = offers[product];
-        var unitPrice = catalog.GetUnitPrice(product);
-        Discount discount = null;
+        _shoppingCartItems[product].SetUnitPrice(catalog.GetUnitPrice(product));
         IDiscountStrategy discountStrategy = null;
 
         switch (offer.OfferType)
         {
             case SpecialOfferType.ThreeForTwo:
-                discountStrategy = new ThreeForTwoDiscount(offer, quantityAsInt, unitPrice);
+                discountStrategy = new ThreeForTwoDiscount(offer, _shoppingCartItems[product]);
                 break;
             case SpecialOfferType.TenPercentDiscount:
-                discountStrategy = new PercentageDiscount(offer, quantityAsInt, unitPrice);
+                discountStrategy = new PercentageDiscount(offer, _shoppingCartItems[product]);
                 break;
             case SpecialOfferType.TwoForAmount:
-                discountStrategy = new TwoForAmountDiscount(offer, quantityAsInt, unitPrice);
+                discountStrategy = new TwoForAmountDiscount(offer, _shoppingCartItems[product]);
                 break;
             case SpecialOfferType.FiveForAmount:
-                discountStrategy = new FiveForAmountDiscount(offer, quantityAsInt, unitPrice);
+                discountStrategy = new FiveForAmountDiscount(offer, _shoppingCartItems[product]);
                 break;
             default:
                 break;

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Text.RegularExpressions;
-
-namespace SupermarketReceipt.Offers;
+﻿namespace SupermarketReceipt.Offers;
 public abstract class BaseDiscountStrategy : IDiscountStrategy
 {
     protected readonly Offer _offer;
-    protected readonly int _quantity;
-    protected readonly double _unitPrice;
+    protected readonly ShoppingCartItem _shoppingCartItem;
 
-    public BaseDiscountStrategy(Offer offer, int quantity, double unitPrice)
+    public BaseDiscountStrategy(Offer offer, ShoppingCartItem shoppingCartItem)
     {
         _offer = offer;
-        _quantity = quantity;
-        _unitPrice = unitPrice;
+        _shoppingCartItem = shoppingCartItem;
     }
 
     public abstract Discount CalculateDiscount();
